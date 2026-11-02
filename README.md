@@ -1,48 +1,53 @@
-# Astro Starter Kit: Basics
+# Weather App
 
-```sh
-npm create astro@latest -- --template basics
+App del clima que detecta tu ubicación a partir de la IP y muestra el tiempo actual con un tema visual y animaciones que cambian según las condiciones.
+
+## Cómo funciona
+
+1. Toma la IP del visitante y la valida.
+2. Obtiene ciudad y coordenadas con [ipinfo.io](https://ipinfo.io), cacheando el resultado en Upstash Redis.
+3. Consulta el clima en [Open-Meteo](https://open-meteo.com) y traduce el código WMO a una categoría simple (`src/helpers/wmoToSimpleCode.ts`).
+4. Aplica el tema visual correspondiente (`src/lib/weatherThemes.ts`).
+
+## Stack
+
+- [Astro](https://astro.build) 5 con renderizado en servidor
+- TypeScript y Zod para validar las respuestas externas
+- Open-Meteo (`openmeteo`) para el clima
+- Upstash Redis para el caché de IP
+- Nanostores
+- Despliegue en Vercel
+
+## Estructura
+
+```
+src/
+  lib/        ip.ts, weather.ts, cache.ts, weatherThemes.ts
+  helpers/    Conversión de códigos WMO
+  errors/     Errores propios (IP inválida)
+  components/ WeatherCard
+  pages/      index.astro
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Puesta en marcha
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+npm install
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+Variables de entorno en `.env`:
 
-## 🧞 Commands
+| Variable | Descripción |
+|---|---|
+| `IP_API_KEY` | Token de ipinfo.io |
+| `UPSTASH_REDIS_REST_URL` | URL de Upstash Redis |
+| `UPSTASH_REDIS_REST_TOKEN` | Token de Upstash Redis |
 
-All commands are run from the root of the project, from a terminal:
+```bash
+npm run dev       # servidor de desarrollo
+npm run build     # build de producción
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Autor
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Juan Beresiarte — [@beresiartejuan](https://github.com/beresiartejuan)
